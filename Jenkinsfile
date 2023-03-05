@@ -28,7 +28,7 @@ pipeline {
 		    steps {
 			    sh 'whoami'
 			    script {
-				    myimage = docker.build("sumanth17121988/cicd:${env.BUILD_ID}")
+				    myimage = docker.build("sumanth17121988/cicd:2")
 			    }
 		    }
 	    }
@@ -40,10 +40,21 @@ pipeline {
 				    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
             				sh "docker login -u sumanth17121988 -p ${dockerhub}"
 				    }
-				        myimage.push("${env.BUILD_ID}")
+				        sh "docker push sumanth17121988/cicd:2"
 				    
 			    }
 		    }
 	    }
+	     stage("Run Docker Container") {
+		    steps {
+	
+				    echo "Running Docker Container"
+            			    sh 'docker run -d -p 8080:8080 sumanth17121988/cicd:2' 
+		    }
+	    }
+	    
+	    
+	    
+	    
   }
 }
