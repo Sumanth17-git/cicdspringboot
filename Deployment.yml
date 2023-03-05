@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: springweb-app
-          image: sumanth17121988/cicd:2
+          image: sumanth17121988/cicd:3
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
