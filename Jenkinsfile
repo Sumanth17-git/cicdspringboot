@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+	tools {
+		maven 'Maven'
+	}
+	
+	environment {
+		PROJECT_ID = 'steel-pod-365713'
+                CLUSTER_NAME = 'cluster-3'
+                LOCATION = 'us-central1-c'
+                CREDENTIALS_ID = 'Kubernetes'		
+	}
+	
+    stages {
+	    stage('Scm Checkout') {
+		    steps {
+			    checkout scm
+		    }
+	    }
+	    
+	    stage('Build') {
+		    steps {
+			    sh 'mvn clean package'
+		    }
+	    }
+	    
+	    stage('Build Docker Image') {
+		    steps {
+			    sh 'whoami'
+			    script {
+				    myimage = docker.build("sumanth17121988/petclinic:${env.BUILD_ID}")
+			    }
+		    }
+	    }
+	    
+	    stage("Push Docker Image") {
+		    steps {
+			    script {
+				    echo "Push Docker Image"
+				    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
+            				sh "docker login -u sumanth17121988 -p ${dockerhub}"
+				    }
+				        myimage.push("${env.BUILD_ID}")
+				    
+			    }
+		    }
+	    }
+}
