@@ -5,8 +5,8 @@ pipeline {
 	}
 	
 	environment {
-		PROJECT_ID = 'steel-pod-365713'
-                CLUSTER_NAME = 'cluster-3'
+		PROJECT_ID = 'root-furnace-374507'
+                CLUSTER_NAME = 'cluster-1'
                 LOCATION = 'us-central1-c'
                 CREDENTIALS_ID = 'Kubernetes'		
 	}
@@ -28,7 +28,7 @@ pipeline {
 		    steps {
 			    sh 'whoami'
 			    script {
-				    myimage = docker.build("sumanth17121988/petclinic:${env.BUILD_ID}")
+				    myimage = docker.build("sumanth17121988/cicd:${env.BUILD_ID}")
 			    }
 		    }
 	    }
