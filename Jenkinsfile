@@ -28,7 +28,7 @@ pipeline {
 		    steps {
 			    sh 'whoami'
 			    script {
-				    myimage = docker.build("sumanth17121988/cicd:2")
+				    myimage = docker.build("sumanth17121988/cicd:3")
 			    }
 		    }
 	    }
@@ -40,21 +40,20 @@ pipeline {
 				    withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
             				sh "docker login -u sumanth17121988 -p ${dockerhub}"
 				    }
-				        sh "docker push sumanth17121988/cicd:2"
+				        sh "docker push sumanth17121988/cicd:3"
 				    
 			    }
 		    }
 	    }
-	     stage("Run Docker Container") {
-		    steps {
-	
-				    echo "Running Docker Container"
-            			    sh 'docker run -d -p 8082:8080 sumanth17121988/cicd:2' 
+	   stage('Deploy to K8s') {
+		    steps{
+			    echo "Deployment started ..."
+			    sh 'ls -ltr'
+			    sh 'pwd'
+			    echo "Start deployment of deployment.yaml"
+			    step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: 'deployment.yaml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+			    echo "Deployment Finished ..."
 		    }
-	    }
-	    
-	    
-	    
-	    
+	    }  
   }
 }
