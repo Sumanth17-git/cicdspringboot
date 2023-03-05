@@ -49,7 +49,7 @@ pipeline {
 		    steps {
 	
 				    echo "Running Docker Container"
-            			    sh 'docker run -d -p 8080:8080 sumanth17121988/cicd:2' 
+            			    sh 'docker run -d -p 8082:8080 sumanth17121988/cicd:2' 
 		    }
 	    }
 	    
